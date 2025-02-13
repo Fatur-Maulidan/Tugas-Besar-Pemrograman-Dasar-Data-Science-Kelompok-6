@@ -180,6 +180,20 @@ elif selected == "Data Pre-Processing":
                 st.write("-" * 40)
             except Exception as e:
                 print(f"Error processing {file}: {e}")
+                
+    for file in file_paths:
+        # Memeriksa Missing Value dari setiap dataset
+            try:
+                df = pd.read_csv(file)
+                missing_values = df.isnull().sum()
+                print(f"Missing values in {file}:")
+                print(missing_values)
+                print("-" * 40)
+                st.write(f"Missing values in {file}:")
+                st.write(missing_values)
+                st.write("-" * 40)
+            except Exception as e:
+                print(f"Error processing {file}: {e}")
         
     st.subheader('Data Cleaning (Handle Missing Values)')
     with st.echo():
