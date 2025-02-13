@@ -230,52 +230,52 @@ elif selected == "Data Pre-Processing":
 
         print("Semua file telah diproses dan disimpan di folder processed_files.")
         
-    # Folder tempat menyimpan hasil
-    output_folder = "processed_files"
-    os.makedirs(output_folder, exist_ok=True)
+    # # Folder tempat menyimpan hasil
+    # output_folder = "processed_files"
+    # os.makedirs(output_folder, exist_ok=True)
     
-    # Loop untuk memproses setiap file
-    for file in file_paths:
-        file_path = f"{file}"
-        folder, filename = os.path.split(file_path)
+    # # Loop untuk memproses setiap file
+    # for file in file_paths:
+    #     file_path = f"{file}"
+    #     folder, filename = os.path.split(file_path)
 
-        try:
-            # Load dataset
-            df = pd.read_csv(file_path)
+    #     try:
+    #         # Load dataset
+    #         df = pd.read_csv(file_path)
 
-            # Konversi kolom waktu menjadi format datetime
-            df['datetime'] = pd.to_datetime(df[['year', 'month', 'day', 'hour']])
+    #         # Konversi kolom waktu menjadi format datetime
+    #         df['datetime'] = pd.to_datetime(df[['year', 'month', 'day', 'hour']])
 
-            # Hapus kolom year, month, day, hour karena sudah tergabung dalam datetime
-            df = df.drop(columns=['year', 'month', 'day', 'hour'])
+    #         # Hapus kolom year, month, day, hour karena sudah tergabung dalam datetime
+    #         df = df.drop(columns=['year', 'month', 'day', 'hour'])
 
-            # Set datetime sebagai index untuk interpolasi time series
-            df = df.set_index('datetime')
+    #         # Set datetime sebagai index untuk interpolasi time series
+    #         df = df.set_index('datetime')
 
-            # 1. Mengisi kolom dengan missing value 1-3% menggunakan interpolasi berbasis waktu
-            columns_interpolation = ["PM2.5", "PM10", "SO2", "O3","TEMP", "PRES", "DEWP", "RAIN", "WSPM"]
-            df[columns_interpolation] = df[columns_interpolation].interpolate(method="time")
+    #         # 1. Mengisi kolom dengan missing value 1-3% menggunakan interpolasi berbasis waktu
+    #         columns_interpolation = ["PM2.5", "PM10", "SO2", "O3","TEMP", "PRES", "DEWP", "RAIN", "WSPM"]
+    #         df[columns_interpolation] = df[columns_interpolation].interpolate(method="time")
 
-            # 2. Mengisi kolom dengan missing value >3% menggunakan KNN Imputer
-            columns_knn_impute = ["CO", "NO2"]
-            imputer = KNNImputer(n_neighbors=5)
-            df[columns_knn_impute] = imputer.fit_transform(df[columns_knn_impute])
+    #         # 2. Mengisi kolom dengan missing value >3% menggunakan KNN Imputer
+    #         columns_knn_impute = ["CO", "NO2"]
+    #         imputer = KNNImputer(n_neighbors=5)
+    #         df[columns_knn_impute] = imputer.fit_transform(df[columns_knn_impute])
 
-            # 3. Mengisi kolom kategorikal "wd" dengan mode (nilai yang paling sering muncul)
-            df['wd'] = df['wd'].fillna(df['wd'].mode()[0])
+    #         # 3. Mengisi kolom kategorikal "wd" dengan mode (nilai yang paling sering muncul)
+    #         df['wd'] = df['wd'].fillna(df['wd'].mode()[0])
 
-            # Reset index kembali ke format semula
-            df = df.reset_index()
+    #         # Reset index kembali ke format semula
+    #         df = df.reset_index()
 
-            # Simpan hasil dengan nama baru
-            output_file_path = os.path.join(output_folder, f"processed_{filename}")
-            df.to_csv(output_file_path, index=False)
-            print(f"Processed and saved: {output_file_path}")
+    #         # Simpan hasil dengan nama baru
+    #         output_file_path = os.path.join(output_folder, f"processed_{filename}")
+    #         df.to_csv(output_file_path, index=False)
+    #         print(f"Processed and saved: {output_file_path}")
 
-        except Exception as e:
-            print(f"Error processing {file}: {e}")
+    #     except Exception as e:
+    #         print(f"Error processing {file}: {e}")
 
-    print("Semua file telah diproses dan disimpan di folder processed_files.")
+    # print("Semua file telah diproses dan disimpan di folder processed_files.")
     
     
     with st.echo():
